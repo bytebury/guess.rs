@@ -12,25 +12,18 @@
         <main>
             <div class="container">
                 <section class="card flex-col">
-                    <h1>Welcome to {{ shared.app_info.name }}!</h1>
-                    <div class="flex-col gap-2">
-                        <h2>Buttons</h2>
-                        <div class="flex">
-                            <button class="link">link</button>
-                            <button class="btn outline">outline</button>
-                            <button class="btn outline-hover">outline-hover</button>
-                            <button class="btn success">success</button>
-                            <button class="btn info">info</button>
-                            <button class="btn warning">warning</button>
-                            <button class="btn danger">danger</button>
-                        </div>
+                    <h1 class="flex-col items-center gap-2 text-center">
+                      <img src="/assets/images/wave.gif" alt="ferris waving" height="100" width="150" />
+                      Welcome to {{ shared.app_info.name }}!
+                    </h1>
+                    <div class="flex-col gap-2 text-center">
+                      We were tied of planning poker applications that had limits, ads, or cost more than
+                      Netflix. So, we made our own planning tool without all the bells and whistles.
+                      Just straight-forward estimates. To help focus and guide teams into thoughtful
+                      discussions to unlock deeper insights on work.
                     </div>
-                    <div class="flex-col gap-2">
-                        <h2>Pills</h2>
-                        <div class="flex">
-                            <span class="pill pro">Professional</span>
-                            <span class="pill admin">Admin</span>
-                        </div>
+                    <div class="flex-col items-center">
+                      <button hx-put="/breakout" class="btn btn-lg info">Create a Breakout</button>
                     </div>
                 </section>
             </div>

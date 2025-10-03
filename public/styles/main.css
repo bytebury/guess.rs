@@ -1,29 +1,29 @@
 :root {
 	--foreground: #222;
-	--background: #fff1e2;
+	--background: #ffe9df;
 	--success-bg: #4a794c;
 	--success-bg-hover: #3c6c3f;
 	--success-fg: #fff;
 	--danger-bg: #945454;
 	--danger-bg-hover: #874a4a;
 	--danger-fg: #fff;
-	--info-bg: #516e84;
-	--info-bg-hover: #385265;
+	--info-bg: #dc5639;
+	--info-bg-hover: #c14429;
 	--info-fg: #fff;
 	--warning-bg: #836342;
 	--warning-bg-hover: #6f5335;
 	--warning-fg: #fff;
 	--pro-color: #ffdbcf;
 	--admin-color: #e0ffc4;
-	--nav-bg: #53473b;
-	--nav-fg: #fff;
-	--footer-bg: #ffe9d0;
+	--nav-bg: #ffe9df;
+	--nav-fg: #222;
+	--footer-bg: #edccbc;
 	--footer-fg: #444;
-	--card-bg: #fff9f2;
+	--card-bg: #fff3ed;
 	--drawer-bg: var(--background);
 	--input-bg: #fff;
 	--footer-border: 1px solid #00000020;
-	--link: #a03500;
+	--link: #a02600;
 	--muted: #666;
 	--default-spacing: 16px;
 	--default-border-color: #d1d1d1;
@@ -52,6 +52,7 @@ body {
 	background-color: var(--background);
 	color: var(--foreground);
 	min-height: 100dvh;
+  line-height: 1.4rem;
 }
 
 h1 {
@@ -85,6 +86,14 @@ nav#navbar h1 {
 nav#navbar a {
 	color: inherit;
 	text-decoration: none;
+	transition: var(--transition);
+  border-radius: 6px;
+  padding: 4px 8px;
+  margin-left: -8px;
+}
+
+nav#navbar a.brand:hover {
+  background: #ffbea0;
 }
 
 nav#navbar .container {
@@ -102,6 +111,10 @@ nav#navbar .container {
 img {
 	flex-shrink: 0;
 }
+
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
 
 footer#footer {
 	margin-top: auto;
@@ -220,6 +233,11 @@ button.btn {
 	padding: 6px 10px;
 	border-radius: 6px;
 	transition: var(--transition);
+}
+
+button.btn.btn-lg {
+  padding: 10px 16px;
+  font-size: 1.15rem;
 }
 
 button.outline {

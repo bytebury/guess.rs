@@ -1,5 +1,6 @@
 use crate::{AppInfo, domain::User};
 
+pub mod breakout;
 pub mod homepage;
 
 pub struct SharedContext {
