@@ -1,12 +1,11 @@
-use crate::domain::rbac::Role;
+use crate::routes::SharedContext;
+use crate::{SharedState, domain::rbac::Role};
+
 use askama::Template;
 use askama_web::WebTemplate;
 use axum::{Router, extract::State, routing::get};
-use std::sync::Arc;
 
-use crate::{AppState, routes::SharedContext};
-
-pub fn routes() -> Router<Arc<AppState>> {
+pub fn routes() -> Router<SharedState> {
     Router::new().route("/", get(homepage))
 }
 
@@ -16,7 +15,7 @@ struct HomepageTemplate {
     shared: SharedContext,
 }
 
-async fn homepage(State(state): State<Arc<AppState>>) -> HomepageTemplate {
+async fn homepage(State(state): State<SharedState>) -> HomepageTemplate {
     HomepageTemplate {
         shared: SharedContext::new(&state.app_info, None),
     }
