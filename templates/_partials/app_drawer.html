@@ -1,0 +1,33 @@
+<div id="app_drawer_underlay"
+     style="display: none"
+     onclick="closeAppDrawer()"></div>
+<section id="app_drawer" class="flex-col" style="transform: translateX(100%)">
+    <h1>Navigation</h1>
+    {% if let Some(user) = shared.current_user %}
+        <ul class="flex-col gap-2">
+            {% if user.role == Role::Admin %}
+                <li>
+                    <a href="/admin/users">Manage Users</a>
+                </li>
+                <li>
+                    <a href="/admin/countries">Manage Countries</a>
+                </li>
+            {% endif %}
+            <li>
+                <a href="/manage-subscription">Manage Subscription</a>
+            </li>
+            <li>
+                <a href="/checkout">Purchase Pro</a>
+            </li>
+            <li>
+                <button class="link" hx-delete="/auth/signout" hx-swap="none">Sign out</button>
+            </li>
+        </ul>
+    {% else %}
+        <ul>
+            <li>
+                <a href="/auth/google">Login with Google</a>
+            </li>
+        </ul>
+    {% endif %}
+</section>

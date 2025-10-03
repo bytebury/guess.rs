@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>{{ shared.app_info.name }} | Homepage</title>
+        <meta name="description" content="A template application." />
+        <link rel="canonical" href="{{ shared.app_info.website_url }}" />
+        {% include "_partials/meta.html" %}
+        {% include "_partials/scripts.html" %}
+    </head>
+    <body>
+        {% include "_partials/navbar.html" %}
+        <main>
+            <div class="container">
+                <section class="card flex-col">
+                    <h1>Welcome to {{ shared.app_info.name }}!</h1>
+                    <div class="flex-col gap-2">
+                        <h2>Buttons</h2>
+                        <div class="flex">
+                            <button class="link">link</button>
+                            <button class="btn outline">outline</button>
+                            <button class="btn outline-hover">outline-hover</button>
+                            <button class="btn success">success</button>
+                            <button class="btn info">info</button>
+                            <button class="btn warning">warning</button>
+                            <button class="btn danger">danger</button>
+                        </div>
+                    </div>
+                    <div class="flex-col gap-2">
+                        <h2>Pills</h2>
+                        <div class="flex">
+                            <span class="pill pro">Professional</span>
+                            <span class="pill admin">Admin</span>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+        {% include "_partials/footer.html" %}
+    </body>
+</html>

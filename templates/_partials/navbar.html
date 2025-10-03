@@ -1,0 +1,23 @@
+<nav id="navbar">
+    <div class="container">
+        {% if let Some(user) = shared.current_user %}
+            <a href="/dashboard">
+                <h1 class="brand">{{ shared.app_info.name }}</h1>
+            </a>
+        {% else %}
+            <a href="/">
+                <h1 class="brand">{{ shared.app_info.name }}</h1>
+            </a>
+        {% endif %}
+        <button class="btn success" onclick="openAppDrawer()" aria-label="open menu">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="20"
+                 height="20"
+                 fill="currentColor"
+                 style="display: block"
+                 viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5" />
+            </svg>
+        </button>
+    </div>
+</nav>

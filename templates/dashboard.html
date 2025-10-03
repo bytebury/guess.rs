@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>{{ shared.app_info.name }} | Dashboard</title>
+        <meta name="description" content="A template application." />
+        {% include "_partials/meta.html" %}
+        {% include "_partials/scripts.html" %}
+    </head>
+    <body>
+        {% include "_partials/navbar.html" %}
+        <main>
+            <div class="container">
+                <div class="card">
+                    {% if let Some(user) = shared.current_user %}<h1>Welcome, {{ user.first_name | title }}!</h1>{% endif %}
+                </div>
+            </div>
+        </main>
+        {% include "_partials/footer.html" %}
+    </body>
+</html>

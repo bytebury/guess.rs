@@ -1,0 +1,8 @@
+User-agent: *
+Disallow: /admin/
+Disallow: /api/
+Disallow: /internal/
+Disallow: /config/
+Disallow: /private/
+
+Sitemap: https://APP_NAME.com/sitemap.xml

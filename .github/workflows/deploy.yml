@@ -1,0 +1,56 @@
+# name: Deploy to DigitalOcean
+
+# on:
+#   workflow_dispatch:
+#   push:
+#     branches:
+#       - main
+
+# jobs:
+#   deploy:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v2
+
+#       - name: Build Docker Image
+#         run: docker build --build-arg RUN_ID=${{ github.run_id }} -t APP_NAME .
+
+#       - name: Save Docker Image
+#         run: |
+#           docker save APP_NAME -o ./APP_NAME.tar
+#           ls -lh ./APP_NAME.tar
+
+#       - name: Upload Docker Image to DigitalOcean
+#         uses: appleboy/scp-action@v0.1.4
+#         with:
+#           host: ${{ secrets.DO_IP_ADDR }}
+#           username: ${{ secrets.DO_USERNAME }}
+#           key: ${{ secrets.DO_SSH_KEY }}
+#           source: "./APP_NAME.tar"
+#           target: "~/APP_NAME"
+
+#       - name: Deploy on server
+#         uses: appleboy/ssh-action@v0.1.10
+#         with:
+#           host: ${{ secrets.DO_IP_ADDR }}
+#           username: ${{ secrets.DO_USERNAME }}
+#           key: ${{ secrets.DO_SSH_KEY }}
+#           script: |
+#             docker load -i ~/APP_NAME/APP_NAME.tar
+#             rm ~/APP_NAME/APP_NAME.tar
+
+#             docker rm -f APP_NAME_container || true
+#             docker container prune -f
+
+#             cd ~/APP_NAME
+
+#             docker run -d \
+#                 -p 8080:8080 \
+#                 -v $(pwd)/db:/app/db \
+#                 -v $(pwd)/.env:/app/.env \
+#                 -e APP_VERSION=${{ github.run_id }} \
+#                 --name APP_NAME_container APP_NAME  
+
+#             docker system prune -a --volumes -f

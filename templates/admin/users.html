@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>{{ shared.app_info.name }} | Control Panel</title>
+        <meta name="description" content="A template application." />
+        <link rel="canonical" href="{{ shared.app_info.website_url }}" />
+        {% include "_partials/meta.html" %}
+        {% include "_partials/scripts.html" %}
+    </head>
+    <body>
+        {% include "_partials/navbar.html" %}
+        <main>
+            <div class="container">
+                <section class="card flex-col">
+                    <h1>Manage Users</h1>
+                    <form>
+                        <div class="form-control">
+                            <label for="user_search">Search</label>
+                            <input id="user_search"
+                                   name="q"
+                                   autocomplete="off"
+                                   placeholder="Search for user..."
+                                   hx-select="#user_list"
+                                   hx-target="#user_list"
+                                   hx-trigger="keyup changed delay:200ms"
+                                   hx-get="/admin/users"
+                                   type="text" />
+                        </div>
+                    </form>
+                    <div id="user_list" class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>User Details</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for user in users.items %}
+                                    <tr hx-get="/admin/users/{{ user.id }}" hx-target="#modal">
+                                        <td>
+                                            <div class="flex items-center">
+                                                <div class="flex-col items-center gap-1">
+                                                    <img class="avatar"
+                                                         src="{{ user.image_url }}"
+                                                         width="48"
+                                                         height="48"
+                                                         alt="Profile image" />
+                                                    {% if let Some(country_code) = user.country_code %}
+                                                        <img class="flag"
+                                                             src="/assets/images/flags/{{ country_code | lower }}.svg"
+                                                             width="24"
+                                                             height="20"
+                                                             alt="Country Flag" />
+                                                    {% endif %}
+                                                </div>
+                                                <div class="flex-col gap-1">
+                                                    <div class="flex items-center gap-1">
+                                                        <strong class="line-clamp-2">{{ user.full_name | title }}</strong>
+                                                        {% if user.role == Role::Admin %}<span class="pill admin">Admin</span>{% endif %}
+                                                        {% if user.locked %}<span class="pill">Locked</span>{% endif %}
+                                                    </div>
+                                                    <a style="margin: 2px 0" href="mailto:{{ user.email }}">{{ user.email }}</a>
+                                                    {% if let Some(country_name) = user.country_name %}
+                                                        {% if let Some(country_region) = user.country_region %}<div>{{ country_region }},</div>{% endif %}
+                                                        <div>{{ country_name }}</div>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                            <caption>
+                                {% if users.total == 1 %}
+                                    {{ users.total }} user
+                                {% else %}
+                                    {{ users.total }} users
+                                {% endif %}
+                            </caption>
+                        </table>
+                    </div>
+                </section>
+            </div>
+        </main>
+        {% include "_partials/footer.html" %}
+    </body>
+</html>
