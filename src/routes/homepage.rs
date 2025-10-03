@@ -4,16 +4,10 @@ use askama_web::WebTemplate;
 use axum::{Router, extract::State, routing::get};
 use std::sync::Arc;
 
-use crate::{
-    AppState,
-    extract::{current_user::CurrentUser, no_user::NoUser},
-    routes::SharedContext,
-};
+use crate::{AppState, routes::SharedContext};
 
 pub fn routes() -> Router<Arc<AppState>> {
-    Router::new()
-        .route("/", get(homepage))
-        .route("/dashboard", get(dashboard))
+    Router::new().route("/", get(homepage))
 }
 
 #[derive(Template, WebTemplate)]
@@ -22,23 +16,8 @@ struct HomepageTemplate {
     shared: SharedContext,
 }
 
-#[derive(Template, WebTemplate)]
-#[template(path = "dashboard.html")]
-struct DashboardTemplate {
-    shared: SharedContext,
-}
-
-async fn homepage(State(state): State<Arc<AppState>>, NoUser: NoUser) -> HomepageTemplate {
+async fn homepage(State(state): State<Arc<AppState>>) -> HomepageTemplate {
     HomepageTemplate {
         shared: SharedContext::new(&state.app_info, None),
-    }
-}
-
-async fn dashboard(
-    State(state): State<Arc<AppState>>,
-    CurrentUser(current_user): CurrentUser,
-) -> DashboardTemplate {
-    DashboardTemplate {
-        shared: SharedContext::new(&state.app_info, Some(*current_user)),
     }
 }

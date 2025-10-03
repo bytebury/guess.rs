@@ -2,7 +2,7 @@
 if [ ! -f .env ]; then
   echo "🤖 .env not found. Generating..."
   cat >.env <<EOF
-APP_NAME="🍕 crust"
+APP_NAME="Guess"
 APP_WEBSITE_URL="http://localhost:8080" # or https://yourdomain.com
 APP_PORT="8080"
 

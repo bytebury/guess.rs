@@ -13,7 +13,7 @@ async fn main() {
         copy_assets();
     }
 
-    crust::start().await;
+    guess_rs::start().await;
 }
 
 fn is_dev() -> bool {
