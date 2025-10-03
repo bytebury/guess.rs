@@ -9,7 +9,7 @@ use tower_http::{
     compression::CompressionLayer, services::ServeDir, set_header::SetResponseHeaderLayer,
 };
 
-use crate::{application::UserService, infrastructure::db::Database};
+use crate::{application::BreakoutService, infrastructure::db::Database};
 
 pub mod application;
 pub mod domain;
@@ -46,6 +46,7 @@ async fn initialize() -> Router {
     Router::new()
         .merge(serve_static)
         .merge(routes::homepage::routes())
+        .merge(routes::breakout::routes())
         .with_state(state)
         .layer(CompressionLayer::new())
 }
@@ -70,13 +71,13 @@ pub type SharedState = Arc<AppState>;
 
 pub struct AppState {
     pub app_info: AppInfo,
-    pub user_service: UserService,
+    pub breakout_service: BreakoutService,
 }
 impl AppState {
     pub fn new(db: &Arc<Pool<Sqlite>>, app_info: AppInfo) -> Self {
         Self {
             app_info: app_info.clone(),
-            user_service: UserService::new(db),
+            breakout_service: BreakoutService::new(db),
         }
     }
 }

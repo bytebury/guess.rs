@@ -1,17 +1,15 @@
-use crate::{AppInfo, domain::User};
+use crate::AppInfo;
 
 pub mod breakout;
 pub mod homepage;
 
 pub struct SharedContext {
     pub app_info: AppInfo,
-    pub current_user: Option<User>,
 }
 impl SharedContext {
-    pub fn new(app_info: &AppInfo, user: Option<User>) -> Self {
+    pub fn new(app_info: &AppInfo) -> Self {
         Self {
             app_info: app_info.clone(),
-            current_user: user,
         }
     }
 }

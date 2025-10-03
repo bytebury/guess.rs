@@ -1,5 +1,5 @@
+use crate::SharedState;
 use crate::routes::SharedContext;
-use crate::{SharedState, domain::rbac::Role};
 
 use askama::Template;
 use askama_web::WebTemplate;
@@ -17,6 +17,6 @@ struct HomepageTemplate {
 
 async fn homepage(State(state): State<SharedState>) -> HomepageTemplate {
     HomepageTemplate {
-        shared: SharedContext::new(&state.app_info, None),
+        shared: SharedContext::new(&state.app_info),
     }
 }
