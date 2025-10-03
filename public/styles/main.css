@@ -102,12 +102,6 @@ nav#navbar .container {
 	justify-content: space-between;
 }
 
-#app_drawer {
-	position: fixed;
-	top: 0;
-	right: 0;
-}
-
 img {
 	flex-shrink: 0;
 }
