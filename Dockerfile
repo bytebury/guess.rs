@@ -22,7 +22,7 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y libsqlite3-0 ca-certificates libssl1.1 && apt-get clean
 
 # Copy compiled binary and assets
-COPY --from=builder /app/target/release/crust ./app
+COPY --from=builder /app/target/release/guess_rs ./app
 COPY --from=builder /app/templates ./templates
 COPY --from=builder /app/migrations ./migrations
 COPY --from=builder /app/public ./public

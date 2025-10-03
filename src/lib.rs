@@ -9,14 +9,10 @@ use tower_http::{
     compression::CompressionLayer, services::ServeDir, set_header::SetResponseHeaderLayer,
 };
 
-use crate::{
-    application::{CountryService, UserService},
-    infrastructure::{db::Database, payment::stripe::Stripe},
-};
+use crate::{application::UserService, infrastructure::db::Database};
 
 pub mod application;
 pub mod domain;
-pub mod extract;
 pub mod filter;
 pub mod infrastructure;
 pub mod routes;
@@ -50,10 +46,6 @@ async fn initialize() -> Router {
     Router::new()
         .merge(serve_static)
         .merge(routes::homepage::routes())
-        .merge(routes::auth::routes())
-        .merge(routes::webhooks::routes())
-        .merge(routes::payments::routes())
-        .merge(routes::admin::routes())
         .with_state(state)
         .layer(CompressionLayer::new())
 }
@@ -67,27 +59,22 @@ pub struct AppInfo {
 impl AppInfo {
     pub fn new() -> Self {
         Self {
-            name: env::var("APP_NAME").unwrap_or("Crust App".to_string()),
+            name: env::var("APP_NAME").expect("APP_NAME not defined"),
             version: env::var("APP_VERSION").unwrap_or("local".to_string()),
-            website_url: env::var("APP_WEBSITE_URL")
-                .unwrap_or("https://github.com/bytebury/crust".to_string()),
+            website_url: env::var("APP_WEBSITE_URL").expect("APP_WEBSITE_URL not defined"),
         }
     }
 }
 
 pub struct AppState {
     pub app_info: AppInfo,
-    pub stripe: Stripe,
     pub user_service: UserService,
-    pub country_service: CountryService,
 }
 impl AppState {
     pub fn new(db: &Arc<Pool<Sqlite>>, app_info: AppInfo) -> Self {
         Self {
             app_info: app_info.clone(),
             user_service: UserService::new(db),
-            country_service: CountryService::new(db),
-            stripe: Stripe::new(app_info, db),
         }
     }
 }
