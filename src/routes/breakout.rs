@@ -108,8 +108,8 @@ async fn update_user(
 ) -> impl IntoResponse {
     let mut user = UpdateUser::from(&user);
     let mut channels = state.breakout_channels.lock().await;
-
     let channel = BreakoutChannel::find_or_create(&mut channels, &lookup_id);
+
     user.display_name = form.display_name;
 
     let user = match state.user_service.update(&user).await {
