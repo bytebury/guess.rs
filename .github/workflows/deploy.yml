@@ -44,7 +44,7 @@ jobs:
             docker rm -f guess_rs_container || true
             docker container prune -f
 
-            cd ~/APP_NAME
+            cd ~/guess_rs
 
             docker run -d \
                 -p 8081:8081 \
