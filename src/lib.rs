@@ -80,6 +80,7 @@ impl AppInfo {
 pub struct BreakoutChannel {
     tx: broadcast::Sender<String>,
     users: Vec<User>,
+    show_votes: bool,
 }
 
 pub type BreakoutChannels = Arc<Mutex<HashMap<String, BreakoutChannel>>>;
