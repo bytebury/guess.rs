@@ -42,7 +42,6 @@ jobs:
             rm ~/guess_rs/guess_rs.tar
 
             docker rm -f guess_rs_container || true
-            docker container prune -f
 
             cd ~/guess_rs
 
@@ -52,5 +51,3 @@ jobs:
                 -v $(pwd)/.env:/app/.env \
                 -e APP_VERSION=${{ github.run_id }} \
                 --name guess_rs_container guess_rs 
-
-            docker system prune -a --volumes -f
