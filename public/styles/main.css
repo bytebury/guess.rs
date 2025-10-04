@@ -134,6 +134,15 @@ footer#footer {
 	gap: var(--default-spacing);
 }
 
+.flex-col.nowrap,
+.flex.nowrap {
+  flex-wrap: nowrap;
+}
+
+.gap-0 {
+  gap: 0;
+}
+
 .gap-1 {
 	gap: 4px;
 }
@@ -144,6 +153,10 @@ footer#footer {
 
 .items-center {
 	align-items: center;
+}
+
+.justify-between {
+  justify-content: space-between;
 }
 
 .muted {
@@ -291,4 +304,9 @@ ul, ol {
   list-style-type: none;
   padding: 0;
   margin: 0;
+}
+
+aside ul {
+  overflow-y: auto;
+  max-height: 400px;
 }

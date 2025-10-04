@@ -6,6 +6,7 @@
         {% include "_partials/meta.html" %}
         {% include "_partials/scripts.html" %}
         <script src="/assets/scripts/name-swap.{{shared.app_info.version}}.js" defer></script>
+        <script src="/assets/scripts/sse-listener.{{shared.app_info.version}}.js" defer></script>
     </head>
     <body>
         {% include "_partials/navbar.html" %}
@@ -14,20 +15,21 @@
         <section class="breakout">
           <div>
               <ol id="card_list">
-                <li><button id="vote_1" onclick="vote(event)" class="card">1</button></li>
-                <li><button id="vote_2" onclick="vote(event)" class="card">2</button></li>
-                <li><button id="vote_3" onclick="vote(event)" class="card">3</button></li>
-                <li><button id="vote_5" onclick="vote(event)" class="card">5</button></li>
-                <li><button id="vote_8" onclick="vote(event)" class="card">8</button></li>
-                <li><button id="vote_13" onclick="vote(event)" class="card">13</button></li>
+                <li><button id="vote_1" onclick="vote(event)" class="card" hx-post="/breakout/{{ breakout.lookup_id }}/vote?vote=1" hx-swap="none">1</button></li>
+                <li><button id="vote_2" onclick="vote(event)" class="card" hx-post="/breakout/{{ breakout.lookup_id }}/vote?vote=2" hx-swap="none">2</button></li>
+                <li><button id="vote_3" onclick="vote(event)" class="card" hx-post="/breakout/{{ breakout.lookup_id }}/vote?vote=3" hx-swap="none">3</button></li>
+                <li><button id="vote_5" onclick="vote(event)" class="card" hx-post="/breakout/{{ breakout.lookup_id }}/vote?vote=5" hx-swap="none">5</button></li>
+                <li><button id="vote_8" onclick="vote(event)" class="card" hx-post="/breakout/{{ breakout.lookup_id }}/vote?vote=8" hx-swap="none">8</button></li>
+                <li><button id="vote_13" onclick="vote(event)" class="card" hx-post="/breakout/{{ breakout.lookup_id }}/vote?vote=13" hx-swap="none">13</button></li>
               </ol>
           </div>
-          <aside class="card flex-col">
-            <div class="flex" style="justify-content: end;">
-            <button class="btn success">Show Votes</button>
-            </div>
-            <ul hx-ext="sse" sse-connect="/breakout/{{ breakout.lookup_id }}/sse" sse-swap="message" id="votes"></ul>
-          </aside>
+          <aside 
+            id="votes" 
+            class="card flex-col"
+            hx-ext="sse"
+            sse-connect="/breakout/{{ breakout.lookup_id }}/sse"
+            sse-swap="message"
+          ></aside>
         </section>
         <div id="name_swap" hx-get="/breakout/{{ breakout.lookup_id }}/user" hx-target="#modal"></div>
         </main>
@@ -38,4 +40,4 @@
           });
         </script>
     </body>
-</html>
+</html> 
