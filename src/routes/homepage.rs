@@ -17,6 +17,6 @@ struct HomepageTemplate {
 
 async fn homepage(State(state): State<SharedState>) -> HomepageTemplate {
     HomepageTemplate {
-        shared: SharedContext::new(&state.app_info),
+        shared: SharedContext::new(&state.app_info, None),
     }
 }

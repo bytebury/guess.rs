@@ -2,7 +2,10 @@ use std::sync::Arc;
 
 use sqlx::SqlitePool;
 
-use crate::{domain::breakout::NewBreakout, infrastructure::db::BreakoutRepository};
+use crate::{
+    domain::breakout::{Breakout, NewBreakout},
+    infrastructure::db::BreakoutRepository,
+};
 
 pub struct BreakoutService {
     breakout_repository: BreakoutRepository,
@@ -14,11 +17,11 @@ impl BreakoutService {
         }
     }
 
-    pub async fn find_by_id(&self, _breakout_id: i64) {
-        todo!();
+    pub async fn find_by_lookup_id(&self, lookup_id: String) -> Result<Breakout, sqlx::Error> {
+        self.breakout_repository.find_by_lookup_id(&lookup_id).await
     }
 
-    pub async fn create(&self, _breakout: &NewBreakout) {
-        todo!();
+    pub async fn create(&self, breakout: &NewBreakout) -> Result<Breakout, sqlx::Error> {
+        self.breakout_repository.create(breakout).await
     }
 }

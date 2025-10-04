@@ -3,16 +3,25 @@ use axum::{
     http::{HeaderValue, header::CACHE_CONTROL},
 };
 use sqlx::{Pool, Sqlite};
+use std::collections::HashMap;
 use std::{env, net::SocketAddr, sync::Arc};
-use tokio::net::TcpListener;
+use tokio::{
+    net::TcpListener,
+    sync::{Mutex, broadcast},
+};
 use tower_http::{
     compression::CompressionLayer, services::ServeDir, set_header::SetResponseHeaderLayer,
 };
 
-use crate::{application::BreakoutService, infrastructure::db::Database};
+use crate::{
+    application::{BreakoutService, UserService},
+    domain::user::User,
+    infrastructure::db::Database,
+};
 
 pub mod application;
 pub mod domain;
+pub mod extract;
 pub mod filter;
 pub mod infrastructure;
 pub mod routes;
@@ -67,17 +76,31 @@ impl AppInfo {
     }
 }
 
+#[derive(Clone)]
+pub struct BreakoutChannel {
+    tx: broadcast::Sender<String>,
+    users: Vec<User>,
+}
+
+pub type BreakoutChannels = Arc<Mutex<HashMap<String, BreakoutChannel>>>;
+
 pub type SharedState = Arc<AppState>;
 
 pub struct AppState {
     pub app_info: AppInfo,
     pub breakout_service: BreakoutService,
+    pub user_service: UserService,
+    pub breakout_channels: BreakoutChannels,
 }
 impl AppState {
     pub fn new(db: &Arc<Pool<Sqlite>>, app_info: AppInfo) -> Self {
+        let breakout_channels: Arc<Mutex<HashMap<String, BreakoutChannel>>> =
+            Arc::new(Mutex::new(HashMap::new()));
         Self {
             app_info: app_info.clone(),
             breakout_service: BreakoutService::new(db),
+            user_service: UserService::new(db),
+            breakout_channels,
         }
     }
 }

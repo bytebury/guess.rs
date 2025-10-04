@@ -2,8 +2,10 @@ use log::info;
 use sqlx::{Connection, SqlitePool, migrate::Migrator, sqlite::SqlitePoolOptions};
 
 pub mod breakout_repository;
+pub mod user_repository;
 
 pub use breakout_repository::BreakoutRepository;
+pub use user_repository::UserRepository;
 
 static MIGRATOR: Migrator = sqlx::migrate!("./migrations");
 
