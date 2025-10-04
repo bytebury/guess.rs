@@ -5,17 +5,14 @@ use axum::{
 use sqlx::{Pool, Sqlite};
 use std::collections::HashMap;
 use std::{env, net::SocketAddr, sync::Arc};
-use tokio::{
-    net::TcpListener,
-    sync::{Mutex, broadcast},
-};
+use tokio::{net::TcpListener, sync::Mutex};
 use tower_http::{
     compression::CompressionLayer, services::ServeDir, set_header::SetResponseHeaderLayer,
 };
 
 use crate::{
     application::{BreakoutService, UserService},
-    domain::user::User,
+    domain::breakout_channel::BreakoutChannel,
     infrastructure::db::Database,
 };
 
@@ -76,14 +73,6 @@ impl AppInfo {
     }
 }
 
-#[derive(Clone)]
-pub struct BreakoutChannel {
-    tx: broadcast::Sender<String>,
-    lookup_id: String,
-    users: Vec<User>,
-    show_votes: bool,
-}
-
 pub type BreakoutChannels = Arc<Mutex<HashMap<String, BreakoutChannel>>>;
 
 pub type SharedState = Arc<AppState>;
@@ -96,8 +85,7 @@ pub struct AppState {
 }
 impl AppState {
     pub fn new(db: &Arc<Pool<Sqlite>>, app_info: AppInfo) -> Self {
-        let breakout_channels: Arc<Mutex<HashMap<String, BreakoutChannel>>> =
-            Arc::new(Mutex::new(HashMap::new()));
+        let breakout_channels: BreakoutChannels = Arc::new(Mutex::new(HashMap::new()));
         Self {
             app_info: app_info.clone(),
             breakout_service: BreakoutService::new(db),
