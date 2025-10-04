@@ -1,6 +1,6 @@
 # guess.rs
 
-> Proudly built in the [🍕 state](https://portal.ct.gov/). With [crust](https://github.com/bytebury/crust).
+> Proudly built in the [🍕 state](https://portal.ct.gov/) with [crust](https://github.com/bytebury/crust).
 
 ## About
 I was tired of using planning poker tools that had limits,
