@@ -74,7 +74,6 @@ impl AppInfo {
 }
 
 pub type BreakoutChannels = Arc<Mutex<HashMap<String, BreakoutChannel>>>;
-
 pub type SharedState = Arc<AppState>;
 
 pub struct AppState {

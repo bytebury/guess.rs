@@ -38,16 +38,12 @@ impl BreakoutChannel {
 
         if !self.show_votes {
             self.users.iter_mut().for_each(|u| u.vote = None);
-            let _ = self
-                .tx
-                .send(BreakoutChannel::send("enable_voting", "start voting"));
+            self.send_event("enable_voting", "start voting");
         } else {
-            let _ = self
-                .tx
-                .send(BreakoutChannel::send("disable_voting", "votes are in"));
+            self.send_event("disable_voting", "votes are in");
         }
 
-        let _ = self.tx.send(Self::voters_html(self));
+        self.send_html(self.voters_html());
     }
 
     pub fn vote(&mut self, user: &User, value: Option<i64>) {
@@ -62,33 +58,37 @@ impl BreakoutChannel {
                 update_user.vote = value;
             }
         }
-        let _ = self.tx.send(Self::voters_html(self));
+        self.send_html(self.voters_html());
     }
 
     pub fn user_changed_name(&mut self, user: &User) {
         Self::remove_user(self, &user.lookup_id);
         Self::add_user(self, &user);
-        let _ = self.tx.send(Self::voters_html(self));
+        self.send_html(self.voters_html());
     }
 
     pub fn add_user(&mut self, user: &User) {
         if !self.users.iter().any(|u| u.lookup_id == user.lookup_id) {
             self.users.push(user.clone());
         }
-        let _ = self.tx.send(Self::voters_html(self));
+        self.send_html(self.voters_html());
     }
 
     pub fn remove_user(&mut self, user_lookup_id: &str) {
         self.users.retain(|u| u.lookup_id != user_lookup_id);
-        let _ = self.tx.send(Self::voters_html(self));
+        self.send_html(self.voters_html());
     }
 
     pub fn is_empty(&self) -> bool {
         self.users.is_empty()
     }
 
-    fn send(name: &str, data: &str) -> String {
-        format!("event: {}\ndata: {}\n\n", name, data)
+    fn send_event(&self, name: &str, data: &str) {
+        let _ = self.tx.send(format!("event: {}\ndata: {}\n\n", name, data));
+    }
+
+    fn send_html(&self, html: String) {
+        let _ = self.tx.send(html);
     }
 
     fn voters_html(&self) -> String {
