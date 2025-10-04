@@ -12,7 +12,7 @@ use askama::Template;
 use askama_web::WebTemplate;
 use axum::{
     Form, Router,
-    extract::{Path, State},
+    extract::{Path, Query, State},
     http::HeaderMap,
     response::{IntoResponse, Redirect, Sse},
     routing::{get, patch, put},
@@ -38,6 +38,7 @@ pub fn routes() -> Router<SharedState> {
         .route("/breakout/{lookup_id}/user", patch(update_user))
         .route("/breakout/{lookup_id}/user", get(user_form))
         .route("/breakout/{lookup_id}/vote", post(vote))
+        .route("/breakout/{lookup_id}/toggle-votes", post(toggle_votes))
 }
 
 #[derive(Template, WebTemplate)]
@@ -63,6 +64,11 @@ struct UpdateUserForm {
     display_name: String,
 }
 
+#[derive(Deserialize)]
+struct VoteQuery {
+    vote: Option<i64>,
+}
+
 async fn user_form(
     BreakoutRoom(breakout): BreakoutRoom,
     BreakoutUser(_): BreakoutUser,
@@ -70,13 +76,29 @@ async fn user_form(
     UpdateUserTemplate { breakout }
 }
 
-async fn vote(
+async fn toggle_votes(
     State(state): State<SharedState>,
     Path(lookup_id): Path<String>,
     BreakoutUser(user): BreakoutUser,
     BreakoutRoom(_): BreakoutRoom,
 ) {
-    todo!("update the vote that the user sent on the breakout");
+    let mut channels = state.breakout_channels.lock().await;
+    let channel = Breakout::find_or_create(&mut channels, &lookup_id);
+
+    Breakout::toggle_votes(channel);
+}
+
+async fn vote(
+    State(state): State<SharedState>,
+    Path(lookup_id): Path<String>,
+    BreakoutUser(user): BreakoutUser,
+    BreakoutRoom(_): BreakoutRoom,
+    Query(params): Query<VoteQuery>,
+) {
+    let mut channels = state.breakout_channels.lock().await;
+    let channel = Breakout::find_or_create(&mut channels, &lookup_id);
+
+    Breakout::vote(channel, &user, params.vote);
 }
 
 async fn update_user(

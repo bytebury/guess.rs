@@ -162,6 +162,16 @@ table caption {
   background: #dc563917;
 }
 
+.hoverable {
+  padding: 4px 8px;
+  cursor: default;
+  border-radius: 8px;
+}
+
+.hoverable:hover {
+  background: var(--background);
+}
+
 @media (max-width: 600px) {
   .breakout {
     grid-template-columns: 1fr;

@@ -79,6 +79,7 @@ impl AppInfo {
 #[derive(Clone)]
 pub struct BreakoutChannel {
     tx: broadcast::Sender<String>,
+    lookup_id: String,
     users: Vec<User>,
     show_votes: bool,
 }

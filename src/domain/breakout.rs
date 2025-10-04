@@ -1,4 +1,5 @@
 use crate::{BreakoutChannel, domain::user::User};
+use askama::Template;
 use std::collections::HashMap;
 use tokio::sync::broadcast;
 
@@ -11,6 +12,13 @@ impl NewBreakout {
             lookup_id: uuid::Uuid::new_v4().to_string(),
         }
     }
+}
+
+#[derive(Template)]
+#[template(path = "breakout_voters.html")]
+pub struct VotersTemplate<'a> {
+    breakout: &'a BreakoutChannel,
+    users: Vec<&'a User>,
 }
 
 #[derive(Debug, sqlx::FromRow)]
@@ -31,11 +39,40 @@ impl Breakout {
                 tx: broadcast::channel(100).0,
                 users: vec![],
                 show_votes: false,
+                lookup_id: lookup_id.to_string(),
             })
     }
 
-    pub fn vote(breakout: &mut BreakoutChannel, user: &User, value: i64) {
-        todo!("Indicate that the user has voted. Should add it to the user.");
+    pub fn toggle_votes(breakout: &mut BreakoutChannel) {
+        breakout.show_votes = !breakout.show_votes;
+
+        if !breakout.show_votes {
+            breakout.users.iter_mut().for_each(|u| u.vote = None);
+            let _ = breakout
+                .tx
+                .send(Breakout::sse_event("enable_voting", "start voting"));
+        } else {
+            let _ = breakout
+                .tx
+                .send(Breakout::sse_event("disable_voting", "votes are in"));
+        }
+
+        let _ = breakout.tx.send(Self::voters_html(breakout));
+    }
+
+    pub fn vote(breakout: &mut BreakoutChannel, user: &User, value: Option<i64>) {
+        if let Some(update_user) = breakout
+            .users
+            .iter_mut()
+            .find(|u| u.lookup_id == user.lookup_id)
+        {
+            if update_user.vote == value {
+                update_user.vote = None;
+            } else {
+                update_user.vote = value;
+            }
+        }
+        let _ = breakout.tx.send(Self::voters_html(breakout));
     }
 
     pub fn user_changed_name(breakout: &mut BreakoutChannel, user: &User) {
@@ -60,17 +97,24 @@ impl Breakout {
         breakout.users.is_empty()
     }
 
+    fn sse_event(name: &str, data: &str) -> String {
+        format!("event: {}\ndata: {}\n\n", name, data)
+    }
+
     fn voters_html(breakout: &BreakoutChannel) -> String {
-        let mut users = breakout.users.clone();
-        users.sort_by(|a, b| {
+        let mut user_refs: Vec<&User> = breakout.users.iter().collect();
+
+        user_refs.sort_by(|a, b| {
             a.display_name
                 .to_lowercase()
                 .cmp(&b.display_name.to_lowercase())
         });
-        users
-            .iter()
-            .map(|u| format!(r#"<li id="user-{}">{}</li>"#, u.lookup_id, u.display_name))
-            .collect::<Vec<_>>()
-            .join("\n")
+
+        VotersTemplate {
+            breakout,
+            users: user_refs,
+        }
+        .render()
+        .unwrap()
     }
 }
