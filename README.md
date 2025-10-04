@@ -12,4 +12,5 @@ unlock deeper insights on work.
 
 Try it out at [https://guess.bytebury.com](https://guess.bytebury.com).
 
-
+## Attributions
+* https://weirder.earth/@dzuk/102711286545743862 (Icons)
