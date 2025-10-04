@@ -24,7 +24,7 @@
           </div>
           <aside class="card flex-col">
             <div class="flex" style="justify-content: end;">
-            <button class="btn info">Show Votes</button>
+            <button class="btn success">Show Votes</button>
             </div>
             <ul hx-ext="sse" sse-connect="/breakout/{{ breakout.lookup_id }}/sse" sse-swap="message" id="votes"></ul>
           </aside>

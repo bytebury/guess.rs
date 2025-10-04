@@ -1,10 +1,12 @@
-<h1>Choose a Display Name</h1>
+<div class="flex-col items-center gap-2 text-center">
+  <img src="/assets/images/wave.gif" alt="ferris waving" height="100" width="150" />
+  <h1>Welcome to the Breakout!</h1>
+  <div class="muted">Please select a display name so your teammates can help identify you.</div>
+</div>
 <form hx-patch="/breakout/{{ breakout.lookup_id }}/user" class="flex-col">
   <div class="form-control">
     <label for="display_name">Display Name</label>
     <input id="display_name" name="display_name" autofocus="true" autocomplete="true" type="text" maxlength="50" required inputmode="givenname" />
   </div>
-  <div>
-    <button class="btn success">Update Display Name</button>
-  </div>
+  <button class="btn success" style="padding: 10px;">Continue to the Breakout</button>
 </form>
