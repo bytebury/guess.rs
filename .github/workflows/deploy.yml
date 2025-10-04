@@ -42,7 +42,6 @@ jobs:
             rm ~/funbanking/funbanking.tar
 
             docker rm -f funbanking_container || true
-            docker container prune -f
 
             cd ~/funbanking
 
@@ -56,5 +55,3 @@ jobs:
                 -e APP_VERSION=${{ github.run_id }} \
                 -e APP_PORT=8080 \
                 --name funbanking_container funbanking  
-
-            docker system prune -a --volumes -f
