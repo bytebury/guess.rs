@@ -37,6 +37,7 @@ pub fn routes() -> Router<SharedState> {
         .route("/breakout/{lookup_id}/sse", get(breakout_sse))
         .route("/breakout/{lookup_id}/user", patch(update_user))
         .route("/breakout/{lookup_id}/user", get(user_form))
+        .route("/breakout/{lookup_id}/vote", post(vote))
 }
 
 #[derive(Template, WebTemplate)]
@@ -67,6 +68,15 @@ async fn user_form(
     BreakoutUser(_): BreakoutUser,
 ) -> UpdateUserTemplate {
     UpdateUserTemplate { breakout }
+}
+
+async fn vote(
+    State(state): State<SharedState>,
+    Path(lookup_id): Path<String>,
+    BreakoutUser(user): BreakoutUser,
+    BreakoutRoom(_): BreakoutRoom,
+) {
+    todo!("update the vote that the user sent on the breakout");
 }
 
 async fn update_user(

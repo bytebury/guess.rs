@@ -30,7 +30,12 @@ impl Breakout {
             .or_insert_with(|| BreakoutChannel {
                 tx: broadcast::channel(100).0,
                 users: vec![],
+                show_votes: false,
             })
+    }
+
+    pub fn vote(breakout: &mut BreakoutChannel, user: &User, value: i64) {
+        todo!("Indicate that the user has voted. Should add it to the user.");
     }
 
     pub fn user_changed_name(breakout: &mut BreakoutChannel, user: &User) {
