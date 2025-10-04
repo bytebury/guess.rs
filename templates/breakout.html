@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>{{ shared.app_info.name }} | Breakout</title>
+        <meta name="description" content="A team breakout so that your team can start estimating stories." />
+        {% include "_partials/meta.html" %}
+        {% include "_partials/scripts.html" %}
+        <script src="/assets/scripts/name-swap.{{shared.app_info.version}}.js" defer></script>
+    </head>
+    <body>
+        {% include "_partials/navbar.html" %}
+        <main>
+            <div class="container">
+        <section class="breakout">
+          <div>
+              <ol id="card_list">
+                <li><button id="vote_1" onclick="vote(event)" class="card">1</button></li>
+                <li><button id="vote_2" onclick="vote(event)" class="card">2</button></li>
+                <li><button id="vote_3" onclick="vote(event)" class="card">3</button></li>
+                <li><button id="vote_5" onclick="vote(event)" class="card">5</button></li>
+                <li><button id="vote_8" onclick="vote(event)" class="card">8</button></li>
+                <li><button id="vote_13" onclick="vote(event)" class="card">13</button></li>
+              </ol>
+          </div>
+          <aside class="card flex-col">
+            <div class="flex" style="justify-content: end;">
+            <button class="btn info">Show Votes</button>
+            </div>
+            <ul hx-ext="sse" sse-connect="/breakout/{{ breakout.lookup_id }}/sse" sse-swap="message" id="votes"></ul>
+          </aside>
+        </section>
+        <div id="name_swap" hx-get="/breakout/{{ breakout.lookup_id }}/user" hx-target="#modal"></div>
+        </main>
+        {% include "_partials/footer.html" %}
+        <script>
+          window.addEventListener("beforeunload", (event) => {
+              navigator.sendBeacon(`/breakout/{{ breakout.lookup_id }}/leave`);
+          });
+        </script>
+    </body>
+</html>

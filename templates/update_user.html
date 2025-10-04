@@ -1,0 +1,10 @@
+<h1>Choose a Display Name</h1>
+<form hx-patch="/breakout/{{ breakout.lookup_id }}/user" class="flex-col">
+  <div class="form-control">
+    <label for="display_name">Display Name</label>
+    <input id="display_name" name="display_name" autofocus="true" autocomplete="true" type="text" maxlength="50" required inputmode="givenname" />
+  </div>
+  <div>
+    <button class="btn success">Update Display Name</button>
+  </div>
+</form>

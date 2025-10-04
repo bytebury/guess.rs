@@ -21,9 +21,12 @@ sqlx = { version = "0.8.6", features = [
   "runtime-tokio-native-tls",
   "sqlite",
 ] }
+time = "0.3.44"
 tokio = { version = "1.47.1", features = ["full"] }
+tokio-stream = { version = "0.1.17", features = ["full"] }
 tower-http = { version = "0.6.6", features = [
   "compression-full",
   "fs",
   "set-header",
 ] }
+uuid = { version = "1.18.1", features = ["v4"] }

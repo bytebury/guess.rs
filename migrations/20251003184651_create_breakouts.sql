@@ -1,0 +1,8 @@
+CREATE TABLE breakouts (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  lookup_id TEXT NOT NULL UNIQUE,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX idx_breakouts_lookup_id ON breakouts(lookup_id);

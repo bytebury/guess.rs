@@ -286,3 +286,9 @@ button.danger {
 button.danger:hover {
 	background: var(--danger-bg-hover);
 }
+
+ul, ol {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
