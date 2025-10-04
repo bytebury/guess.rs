@@ -2,6 +2,7 @@ use crate::{
     SharedState,
     domain::{
         breakout::{Breakout, NewBreakout},
+        breakout_channel::BreakoutChannel,
         user::UpdateUser,
     },
     extract::{breakout::BreakoutRoom, breakout_user::BreakoutUser},
@@ -79,13 +80,11 @@ async fn user_form(
 async fn toggle_votes(
     State(state): State<SharedState>,
     Path(lookup_id): Path<String>,
-    BreakoutUser(user): BreakoutUser,
+    BreakoutUser(_): BreakoutUser,
     BreakoutRoom(_): BreakoutRoom,
 ) {
     let mut channels = state.breakout_channels.lock().await;
-    let channel = Breakout::find_or_create(&mut channels, &lookup_id);
-
-    Breakout::toggle_votes(channel);
+    BreakoutChannel::find_or_create(&mut channels, &lookup_id).toggle_votes();
 }
 
 async fn vote(
@@ -96,9 +95,7 @@ async fn vote(
     Query(params): Query<VoteQuery>,
 ) {
     let mut channels = state.breakout_channels.lock().await;
-    let channel = Breakout::find_or_create(&mut channels, &lookup_id);
-
-    Breakout::vote(channel, &user, params.vote);
+    BreakoutChannel::find_or_create(&mut channels, &lookup_id).vote(&user, params.vote);
 }
 
 async fn update_user(
@@ -112,7 +109,7 @@ async fn update_user(
     let mut user = UpdateUser::from(&user);
     let mut channels = state.breakout_channels.lock().await;
 
-    let channel = Breakout::find_or_create(&mut channels, &lookup_id);
+    let channel = BreakoutChannel::find_or_create(&mut channels, &lookup_id);
     user.display_name = form.display_name;
 
     let user = match state.user_service.update(&user).await {
@@ -120,7 +117,7 @@ async fn update_user(
         Err(_) => return StatusCode::INTERNAL_SERVER_ERROR.into_response(),
     };
 
-    Breakout::user_changed_name(channel, &user);
+    channel.user_changed_name(&user);
 
     let display_name_cookie = Cookie::build(("guess_rs_display_name", user.display_name.clone()))
         .path("/")
@@ -171,11 +168,11 @@ async fn breakout_sse(
     BreakoutRoom(_): BreakoutRoom,
 ) -> Sse<impl Stream<Item = Result<Event, std::convert::Infallible>>> {
     let mut channels = state.breakout_channels.lock().await;
-    let channel = Breakout::find_or_create(&mut channels, &lookup_id);
+    let channel = BreakoutChannel::find_or_create(&mut channels, &lookup_id);
     let tx = &channel.tx;
     let rx = tx.subscribe();
 
-    Breakout::add_user(channel, &user);
+    channel.add_user(&user);
 
     let stream = BroadcastStream::new(rx).filter_map(|msg| match msg {
         Ok(msg) => Some(Ok(Event::default().data(msg))),
@@ -201,11 +198,11 @@ async fn leave_breakout(
     BreakoutRoom(_): BreakoutRoom,
 ) {
     let mut channels = state.breakout_channels.lock().await;
-    let channel = Breakout::find_or_create(&mut channels, &lookup_id);
+    let channel = BreakoutChannel::find_or_create(&mut channels, &lookup_id);
 
-    Breakout::remove_user(channel, &user.lookup_id);
+    channel.remove_user(&user.lookup_id);
 
-    if Breakout::is_empty(channel) {
+    if channel.is_empty() {
         channels.remove(&lookup_id);
     }
 }
