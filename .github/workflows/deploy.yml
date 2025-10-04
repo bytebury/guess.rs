@@ -38,20 +38,19 @@ jobs:
           username: ${{ secrets.DO_USERNAME }}
           key: ${{ secrets.DO_SSH_KEY }}
           script: |
-            docker load -i ~/funbanking/funbanking.tar
-            rm ~/funbanking/funbanking.tar
+            docker load -i ~/guess_rs/guess_rs.tar
+            rm ~/guess_rs/guess_rs.tar
 
-            docker rm -f funbanking_container || true
+            docker rm -f guess_rs_container || true
+            docker container prune -f
 
-            cd ~/funbanking
+            cd ~/guess_rs
 
             docker run -d \
-                -p 8080:8080 \
-                -v $(pwd)/database.db:/app/database.db \
-                -v $(pwd)/database.db-shm:/app/database.db-shm \
-                -v $(pwd)/database.db-wal:/app/database.db-wal \
-                -v $(pwd)/ip_db.BIN:/app/ip_db.BIN \
+                -p 8081:8081 \
+                -v $(pwd)/db:/app/db \
                 -v $(pwd)/.env:/app/.env \
                 -e APP_VERSION=${{ github.run_id }} \
-                -e APP_PORT=8080 \
-                --name funbanking_container funbanking  
+                --name guess_rs_container guess_rs 
+
+            docker system prune -a --volumes -f
