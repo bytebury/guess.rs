@@ -3,12 +3,7 @@
 > Proudly built in the [🍕 state](https://portal.ct.gov/) with [crust](https://github.com/bytebury/crust).
 
 ## About
-We were tied of planning poker applications that had limits, ads,
-or cost more than Netflix. So, we made our own planning tool without
-all the bells and whistles. Just straight-forward estimates.
-
-Helping teams focus and guides them into thoughtful discussions to
-unlock deeper insights on work.
+Tired of planning poker apps with limitations, ads, or high prices, we built our own simplified tool. It focuses on straightforward estimates, helping teams concentrate and fostering thoughtful discussions to unlock deeper work insights.
 
 Try it out at [https://guess.bytebury.com](https://guess.bytebury.com).
 
