@@ -1,4 +1,4 @@
-function vote(event) {
+function toggleCard(event) {
   if (event.target.classList.contains('voted')) {
     event.target.classList.remove('voted');
     return;

@@ -9,7 +9,7 @@ impl NewBreakout {
     }
 }
 
-#[derive(Debug, sqlx::FromRow)]
+#[derive(Debug, Clone, sqlx::FromRow)]
 pub struct Breakout {
     pub id: i64,
     pub lookup_id: String,

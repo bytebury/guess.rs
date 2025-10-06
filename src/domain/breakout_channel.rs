@@ -46,16 +46,16 @@ impl BreakoutChannel {
         self.send_html(self.voters_html());
     }
 
-    pub fn vote(&mut self, user: &User, value: Option<i64>) {
+    pub fn vote(&mut self, user_lookup_id: &str, value: &Option<String>) {
         if let Some(update_user) = self
             .users
             .iter_mut()
-            .find(|u| u.lookup_id == user.lookup_id)
+            .find(|u| u.lookup_id == user_lookup_id)
         {
-            if update_user.vote == value {
+            if update_user.vote == value.clone() {
                 update_user.vote = None;
             } else {
-                update_user.vote = value;
+                update_user.vote = value.clone();
             }
         }
         self.send_html(self.voters_html());
@@ -91,7 +91,7 @@ impl BreakoutChannel {
         let _ = self.tx.send(html);
     }
 
-    fn voters_html(&self) -> String {
+    pub fn voters_html(&self) -> String {
         let mut user_refs: Vec<&User> = self.users.iter().collect();
 
         user_refs.sort_by(|a, b| {

@@ -6,38 +6,65 @@
         {% include "_partials/meta.html" %}
         {% include "_partials/scripts.html" %}
         <script src="/assets/scripts/name-swap.{{shared.app_info.version}}.js" defer></script>
-        <script src="/assets/scripts/sse-listener.{{shared.app_info.version}}.js" defer></script>
+        <script src="/assets/scripts/ws-listener.{{shared.app_info.version}}.js" defer></script>
     </head>
     <body>
         {% include "_partials/navbar.html" %}
         <main>
             <div class="container">
-        <section class="breakout">
+        <section class="breakout" hx-ext="ws" ws-connect="/breakout/{{ breakout.lookup_id }}/ws">
           <div>
               <ol id="card_list">
-                <li><button id="vote_1" onclick="vote(event)" class="card" hx-post="/breakout/{{ breakout.lookup_id }}/vote?vote=1" hx-swap="none">1</button></li>
-                <li><button id="vote_2" onclick="vote(event)" class="card" hx-post="/breakout/{{ breakout.lookup_id }}/vote?vote=2" hx-swap="none">2</button></li>
-                <li><button id="vote_3" onclick="vote(event)" class="card" hx-post="/breakout/{{ breakout.lookup_id }}/vote?vote=3" hx-swap="none">3</button></li>
-                <li><button id="vote_5" onclick="vote(event)" class="card" hx-post="/breakout/{{ breakout.lookup_id }}/vote?vote=5" hx-swap="none">5</button></li>
-                <li><button id="vote_8" onclick="vote(event)" class="card" hx-post="/breakout/{{ breakout.lookup_id }}/vote?vote=8" hx-swap="none">8</button></li>
-                <li><button id="vote_13" onclick="vote(event)" class="card" hx-post="/breakout/{{ breakout.lookup_id }}/vote?vote=13" hx-swap="none">13</button></li>
+                <li>
+                  <form ws-send>
+                    <input type="hidden" name="action" value="vote" />
+                    <input type="hidden" name="vote" value="1" />
+                    <button class="card" onclick="toggleCard(event)">1</button>
+                  </form>
+                </li>
+                <li>
+                  <form ws-send>
+                    <input type="hidden" name="action" value="vote" />
+                    <input type="hidden" name="vote" value="2" />
+                    <button class="card" onclick="toggleCard(event)">2</button>
+                  </form>
+                </li>
+                <li>
+                  <form ws-send>
+                    <input type="hidden" name="action" value="vote" />
+                    <input type="hidden" name="vote" value="3" />
+                    <button class="card" onclick="toggleCard(event)">3</button>
+                  </form>
+                </li>
+                <li>
+                  <form ws-send>
+                    <input type="hidden" name="action" value="vote" />
+                    <input type="hidden" name="vote" value="5" />
+                    <button class="card" onclick="toggleCard(event)">5</button>
+                  </form>
+                </li>
+                <li>
+                  <form ws-send>
+                    <input type="hidden" name="action" value="vote" />
+                    <input type="hidden" name="vote" value="8" />
+                    <button class="card" onclick="toggleCard(event)">8</button>
+                  </form>
+                </li>
+                <li>
+                  <form ws-send>
+                    <input type="hidden" name="action" value="vote" />
+                    <input type="hidden" name="vote" value="13" />
+                    <button class="card" onclick="toggleCard(event)">13</button>
+                  </form>
+                </li>
               </ol>
           </div>
-          <aside 
-            id="votes" 
-            class="card flex-col"
-            hx-ext="sse"
-            sse-connect="/breakout/{{ breakout.lookup_id }}/sse"
-            sse-swap="message"
-          ></aside>
+          <aside class="card flex-col">
+            <div id="votes"></div>
+          </aside>
         </section>
         <div id="name_swap" hx-get="/breakout/{{ breakout.lookup_id }}/user" hx-target="#modal"></div>
         </main>
         {% include "_partials/footer.html" %}
-        <script>
-          window.addEventListener("beforeunload", (event) => {
-              navigator.sendBeacon(`/breakout/{{ breakout.lookup_id }}/leave`);
-          });
-        </script>
     </body>
 </html> 

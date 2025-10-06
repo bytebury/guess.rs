@@ -10,7 +10,7 @@ pub struct User {
     pub id: i64,
     pub lookup_id: String,
     pub display_name: String,
-    pub vote: Option<i64>,
+    pub vote: Option<String>,
 }
 impl From<UserRow> for User {
     fn from(row: UserRow) -> Self {
