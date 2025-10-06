@@ -1,28 +1,33 @@
-<div class="flex" style="justify-content: end;">
-  <button class="btn success" hx-post="/breakout/{{ breakout.lookup_id }}/toggle-votes" hx-swap="none">
-    {% if breakout.show_votes %}
-      Start Voting
-    {% else %}
-      Show Votes
-    {% endif %}
-  </button>
-</div>
-<ul>
-  {% for u in users %}
-  <li id="user-{{ u.lookup_id }}" class="flex items-center justify-between hoverable nowrap">
-    <div class="line-clamp">{{ u.display_name }}</div>
+<div id="votes" class="flex-col gap-2">
+  <div class="flex" style="justify-content:end;">
+    <form ws-send>
+      <input type="hidden" name="action" value="toggle_votes" />
+      <button class="btn success">
+        {% if breakout.show_votes %}
+          Start Voting
+        {% else %}
+          Show Votes
+        {% endif %}
+      </button>
+    </form>
+  </div>
+  <ul>
+    {% for u in users %}
+    <li id="user-{{ u.lookup_id }}" class="flex items-center justify-between hoverable nowrap">
+      <div class="line-clamp">{{ u.display_name }}</div>
 
-    {% if let Some(vote) = u.vote %}
-      {% if breakout.show_votes %}
-        <div><strong style="font-size: 1.1rem">{{ vote }}</strong></div>
+      {% if let Some(vote) = u.vote %}
+        {% if breakout.show_votes %}
+          <div><strong style="font-size: 1.1rem">{{ vote }}</strong></div>
+        {% else %}
+          <img src="/assets/images/voted.svg" alt="voted" width="20" height="20" />
+        {% endif %}
       {% else %}
-        <img src="/assets/images/voted.svg" alt="voted" width="20" height="20" />
+        {% if breakout.show_votes %}
+          <div><strong style="font-size: 1.1rem">--</strong></div>
+        {% endif %}
       {% endif %}
-    {% else %}
-      {% if breakout.show_votes %}
-        <div><strong style="font-size: 1.1rem">--</strong></div>
-      {% endif %}
-    {% endif %}
-  </li>
-  {% endfor %}
-</ul>
+    </li>
+    {% endfor %}
+  </ul>
+</div>
