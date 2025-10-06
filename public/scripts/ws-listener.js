@@ -19,7 +19,9 @@ document.body.addEventListener('htmx:wsAfterMessage', function() {
   if (toggle_votes_btn && toggle_votes_btn.textContent.trim() === 'Start Voting') {
     disableVoting();
   } else {
-    enableVoting();
+    card_list.querySelectorAll('button').forEach(button => {
+      button.disabled = false;
+    });
   }
 });
 
