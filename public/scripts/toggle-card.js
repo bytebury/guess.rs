@@ -4,7 +4,7 @@ function toggleCard(event) {
     return;
   }
 
-  for (const element of card_list.querySelectorAll('.card')) {
+  for (const element of card_list.querySelectorAll('button')) {
     element.classList.remove('voted');
   }
   event.target.classList.add('voted');

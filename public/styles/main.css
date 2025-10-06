@@ -247,6 +247,10 @@ button.btn.btn-lg {
   font-size: 1.15rem;
 }
 
+button.btn.btn-sm {
+  font-size: 0.9rem;
+}
+
 button.outline {
 	border: var(--default-border);
 }
@@ -310,3 +314,11 @@ aside ul {
   overflow-y: auto;
   max-height: 400px;
 }
+
+.cards button {
+	padding: var(--default-spacing);
+	background: var(--card-bg);
+	border-radius: 12px;
+	border: var(--pill-border);
+}
+

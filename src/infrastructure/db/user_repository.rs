@@ -1,6 +1,5 @@
-use std::sync::Arc;
-
 use sqlx::{SqlitePool, query_as};
+use std::sync::Arc;
 
 use crate::domain::user::{NewUser, UpdateUser, UserRow};
 

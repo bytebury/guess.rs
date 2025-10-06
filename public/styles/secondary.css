@@ -166,6 +166,7 @@ table caption {
   padding: 4px 8px;
   cursor: default;
   border-radius: 8px;
+  font-size: 1.05rem;
 }
 
 .hoverable:hover {
@@ -175,6 +176,20 @@ table caption {
 @media (max-width: 600px) {
   .breakout {
     grid-template-columns: 1fr;
+  }
+
+  .breakout aside {
+    order: 1;
+  }
+
+  .breakout section {
+    order: 2;
+  }
+
+  .breakout ol button {
+    font-size: 1.25rem;
+    width: 132px;
+    height: 84px;
   }
 }
 
