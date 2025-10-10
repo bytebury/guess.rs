@@ -28,7 +28,7 @@ impl UserRepository {
     pub async fn update(&self, user: &UpdateUser) -> Result<UserRow, sqlx::Error> {
         query_as(r#"UPDATE users SET display_name = ? WHERE id = ? RETURNING *"#)
             .bind(&user.display_name)
-            .bind(&user.id)
+            .bind(user.id)
             .fetch_one(self.db.as_ref())
             .await
     }

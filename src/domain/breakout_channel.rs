@@ -63,7 +63,7 @@ impl BreakoutChannel {
 
     pub fn user_changed_name(&mut self, user: &User) {
         Self::remove_user(self, &user.lookup_id);
-        Self::add_user(self, &user);
+        Self::add_user(self, user);
         self.send_html(self.voters_html());
     }
 

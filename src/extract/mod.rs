@@ -28,7 +28,7 @@ impl FromRequestParts<SharedState> for BaseUser {
             Some(cookie) => cookie.value().to_string(),
             _ => {
                 // User does not exist, so create one.
-                match state.user_service.create(&NewUser::new()).await {
+                match state.user_service.create(&NewUser::default()).await {
                     Ok(user) => user.lookup_id,
                     Err(_) => return Ok(BaseUser::None),
                 }

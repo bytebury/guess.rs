@@ -26,8 +26,8 @@ impl From<UserRow> for User {
 pub struct NewUser {
     pub lookup_id: String,
 }
-impl NewUser {
-    pub fn new() -> Self {
+impl Default for NewUser {
+    fn default() -> Self {
         Self {
             lookup_id: uuid::Uuid::new_v4().to_string(),
         }

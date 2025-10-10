@@ -208,7 +208,7 @@ async fn handle_socket(socket: WebSocket, state: SharedState, user: User, breako
 }
 
 async fn create_breakout(State(state): State<SharedState>) -> impl IntoResponse {
-    let breakout = NewBreakout::new();
+    let breakout = NewBreakout::default();
     match state.breakout_service.create(&breakout).await {
         Ok(breakout) => {
             HTMX::redirect(&format!("/breakout/{}", breakout.lookup_id)).into_response()

@@ -1,8 +1,8 @@
 pub struct NewBreakout {
     pub lookup_id: String,
 }
-impl NewBreakout {
-    pub fn new() -> Self {
+impl Default for NewBreakout {
+    fn default() -> Self {
         Self {
             lookup_id: uuid::Uuid::new_v4().to_string(),
         }
