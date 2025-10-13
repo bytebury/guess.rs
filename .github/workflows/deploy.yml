@@ -50,4 +50,6 @@ jobs:
                 -v $(pwd)/db:/app/db \
                 -v $(pwd)/.env:/app/.env \
                 -e APP_VERSION=${{ github.run_id }} \
-                --name guess_rs_container guess_rs 
+                --name guess_rs_container guess_rs
+            
+            docker system prune -a -f --volumes
