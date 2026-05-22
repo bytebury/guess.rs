@@ -48,10 +48,16 @@ struct ClientMessage {
 struct BreakoutTemplate {
     shared: SharedContext,
     breakout: Breakout,
+    my_vote: Option<String>,
 }
 impl BreakoutTemplate {
     pub fn new(shared: SharedContext, breakout: Breakout) -> Self {
-        Self { shared, breakout }
+        let my_vote = shared.user.as_ref().and_then(|u| u.vote.clone());
+        Self {
+            shared,
+            breakout,
+            my_vote,
+        }
     }
 }
 
@@ -109,7 +115,7 @@ async fn update_user(
 async fn breakout(
     State(state): State<SharedState>,
     Path(lookup_id): Path<String>,
-    BreakoutUser(user): BreakoutUser,
+    BreakoutUser(mut user): BreakoutUser,
     BreakoutRoom(_): BreakoutRoom,
     cookies: CookieJar,
 ) -> impl IntoResponse {
@@ -125,6 +131,13 @@ async fn breakout(
         .max_age(Duration::days(365));
     let cookies = cookies.add(display_name_cookie);
     let cookies = cookies.add(whoami_cookie);
+
+    {
+        let channels = state.breakout_channels.lock().await;
+        if let Some(channel) = channels.get(&lookup_id) {
+            user.vote = channel.vote_for(&user.lookup_id).cloned();
+        }
+    }
 
     match state.breakout_service.find_by_lookup_id(lookup_id).await {
         Ok(breakout) => (
