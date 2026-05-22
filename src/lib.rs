@@ -25,7 +25,10 @@ pub mod util;
 
 pub async fn start() {
     let app = initialize().await;
-    let port = env::var("APP_PORT").unwrap_or_else(|_| "8080".to_string());
+    // Railway (and most PaaS) inject PORT; fall back to APP_PORT, then 8080.
+    let port = env::var("PORT")
+        .or_else(|_| env::var("APP_PORT"))
+        .unwrap_or_else(|_| "8080".to_string());
 
     let listener = TcpListener::bind(format!("0.0.0.0:{port}")).await.unwrap();
 
@@ -65,9 +68,10 @@ pub struct AppInfo {
 impl AppInfo {
     pub fn new() -> Self {
         Self {
-            name: env::var("APP_NAME").expect("APP_NAME not defined"),
-            version: env::var("APP_VERSION").unwrap_or("local".to_string()),
-            website_url: env::var("APP_WEBSITE_URL").expect("APP_WEBSITE_URL not defined"),
+            name: env::var("APP_NAME").unwrap_or_else(|_| "Guess".to_string()),
+            version: env::var("APP_VERSION").unwrap_or_else(|_| "local".to_string()),
+            website_url: env::var("APP_WEBSITE_URL")
+                .unwrap_or_else(|_| "http://localhost:8080".to_string()),
         }
     }
 }

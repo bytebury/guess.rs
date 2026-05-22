@@ -1,8 +1,8 @@
-ARG RUN_ID
+ARG RUN_ID=local
 
 # ---------- Stage 1: Build Rust ----------
 FROM rust:1.90-bullseye AS builder
-ARG RUN_ID
+ARG RUN_ID=local
 
 # Install SQLite headers and OpenSSL dev for sqlx with TLS
 RUN apt-get update && apt-get install -y libsqlite3-dev pkg-config libssl-dev
@@ -14,7 +14,7 @@ COPY . .
 RUN cargo build --release
 
 FROM debian:bullseye-slim
-ARG RUN_ID
+ARG RUN_ID=local
 
 WORKDIR /app
 
@@ -39,5 +39,8 @@ RUN for dir in public/styles public/scripts; do \
     done; \
     fi; \
     done
+
+# Railway injects PORT at runtime; the app falls back to APP_PORT or 8080.
+EXPOSE 8080
 
 CMD ["./app"]
