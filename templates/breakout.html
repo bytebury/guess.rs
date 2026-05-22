@@ -19,42 +19,42 @@
                       <form ws-send>
                         <input type="hidden" name="action" value="vote" />
                         <input type="hidden" name="vote" value="1" />
-                        <button onclick="toggleCard(event)">1</button>
+                        <button onclick="toggleCard(event)"{% if my_vote.as_deref() == Some("1") %} class="voted"{% endif %}>1</button>
                       </form>
                     </li>
                     <li>
                       <form ws-send>
                         <input type="hidden" name="action" value="vote" />
                         <input type="hidden" name="vote" value="2" />
-                        <button onclick="toggleCard(event)">2</button>
+                        <button onclick="toggleCard(event)"{% if my_vote.as_deref() == Some("2") %} class="voted"{% endif %}>2</button>
                       </form>
                     </li>
                     <li>
                       <form ws-send>
                         <input type="hidden" name="action" value="vote" />
                         <input type="hidden" name="vote" value="3" />
-                        <button onclick="toggleCard(event)">3</button>
+                        <button onclick="toggleCard(event)"{% if my_vote.as_deref() == Some("3") %} class="voted"{% endif %}>3</button>
                       </form>
                     </li>
                     <li>
                       <form ws-send>
                         <input type="hidden" name="action" value="vote" />
                         <input type="hidden" name="vote" value="5" />
-                        <button onclick="toggleCard(event)">5</button>
+                        <button onclick="toggleCard(event)"{% if my_vote.as_deref() == Some("5") %} class="voted"{% endif %}>5</button>
                       </form>
                     </li>
                     <li>
                       <form ws-send>
                         <input type="hidden" name="action" value="vote" />
                         <input type="hidden" name="vote" value="8" />
-                        <button onclick="toggleCard(event)">8</button>
+                        <button onclick="toggleCard(event)"{% if my_vote.as_deref() == Some("8") %} class="voted"{% endif %}>8</button>
                       </form>
                     </li>
                     <li>
                       <form ws-send>
                         <input type="hidden" name="action" value="vote" />
                         <input type="hidden" name="vote" value="13" />
-                        <button onclick="toggleCard(event)">13</button>
+                        <button onclick="toggleCard(event)"{% if my_vote.as_deref() == Some("13") %} class="voted"{% endif %}>13</button>
                       </form>
                     </li>
                   </ol>

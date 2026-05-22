@@ -16,6 +16,7 @@ pub struct BreakoutChannel {
     pub tx: broadcast::Sender<String>,
     pub lookup_id: String,
     pub users: Vec<User>,
+    pub votes: HashMap<String, String>,
     pub show_votes: bool,
 }
 impl BreakoutChannel {
@@ -28,6 +29,7 @@ impl BreakoutChannel {
             .or_insert_with(|| BreakoutChannel {
                 tx: broadcast::channel(100).0,
                 users: vec![],
+                votes: HashMap::new(),
                 show_votes: false,
                 lookup_id: lookup_id.to_string(),
             })
@@ -38,6 +40,7 @@ impl BreakoutChannel {
 
         if !self.show_votes {
             self.users.iter_mut().for_each(|u| u.vote = None);
+            self.votes.clear();
             self.send_event("enable_voting", "start voting");
         } else {
             self.send_event("disable_voting", "votes are in");
@@ -47,18 +50,40 @@ impl BreakoutChannel {
     }
 
     pub fn vote(&mut self, user_lookup_id: &str, value: &Option<String>) {
-        if let Some(update_user) = self
+        let new_vote = match self
             .users
             .iter_mut()
             .find(|u| u.lookup_id == user_lookup_id)
         {
-            if update_user.vote == value.clone() {
-                update_user.vote = None;
-            } else {
-                update_user.vote = value.clone();
+            Some(update_user) => {
+                if update_user.vote == *value {
+                    update_user.vote = None;
+                    None
+                } else {
+                    update_user.vote = value.clone();
+                    value.clone()
+                }
+            }
+            None => {
+                self.send_html(self.voters_html());
+                return;
+            }
+        };
+
+        match new_vote {
+            Some(v) => {
+                self.votes.insert(user_lookup_id.to_string(), v);
+            }
+            None => {
+                self.votes.remove(user_lookup_id);
             }
         }
+
         self.send_html(self.voters_html());
+    }
+
+    pub fn vote_for(&self, user_lookup_id: &str) -> Option<&String> {
+        self.votes.get(user_lookup_id)
     }
 
     pub fn user_changed_name(&mut self, user: &User) {
@@ -69,7 +94,11 @@ impl BreakoutChannel {
 
     pub fn add_user(&mut self, user: &User) {
         if !self.users.iter().any(|u| u.lookup_id == user.lookup_id) {
-            self.users.push(user.clone());
+            let mut user = user.clone();
+            if let Some(v) = self.votes.get(&user.lookup_id) {
+                user.vote = Some(v.clone());
+            }
+            self.users.push(user);
         }
         self.send_html(self.voters_html());
     }
