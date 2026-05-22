@@ -1,4 +1,4 @@
-# [guess.rs](https://guesser.up.railway.app/)
+# guesser
 
 > Proudly built in the [🍕 state](https://portal.ct.gov/).
 
