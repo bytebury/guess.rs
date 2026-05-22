@@ -1,11 +1,11 @@
-# guess.rs
+# [guess.rs](https://guesser.up.railway.app/)
 
-> Proudly built in the [🍕 state](https://portal.ct.gov/) with [crust](https://github.com/bytebury/crust).
+> Proudly built in the [🍕 state](https://portal.ct.gov/).
 
 ## About
 Tired of planning poker apps with limitations, ads, or high prices, we built our own simplified tool. It focuses on straightforward estimates, helping teams concentrate and fostering thoughtful discussions to unlock deeper work insights.
 
-Try it out at [https://guess.bytebury.com](https://guess.bytebury.com).
+Try it out at https://guesser.up.railway.app.
 
 ## Local development
 
